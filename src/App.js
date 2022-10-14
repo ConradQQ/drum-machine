@@ -1,4 +1,6 @@
-function App() {
+import React from "react";
+
+function App({clip}) {
 
   const audioClips = [
     {
@@ -56,15 +58,21 @@ function App() {
       url: 'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
     }
   ];
+
   
+ 
+
+ 
+
   return (
     <div id="drum-machine">
       <div id="pad-bank">
+      <div id="display"></div>
       {audioClips.map(clip => {
        return <Pad className='drum-pad' key={clip.id} clip={clip} />
       })}
       </div>
-      <div id="display"></div>
+      
     </div>
     
   );
@@ -73,15 +81,43 @@ function App() {
 
 function Pad({clip}) {
 
+  React.useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+
+    }
+  }, []);
+
+  React.useEffect(() => {
+    document.addEventListener('keydown', handleDisplay);
+    return () => {
+    document.removeEventListener('keydown', handleDisplay);
+    }
+  }, []);
+
+  const handleKeyPress = (e) => {
+    if (e.keyCode === clip.keyCode) {
+      playSound()
+    }
+  }
+
+  const handleDisplay = (e) => {
+    if (e.keyCode === clip.keyCode) {
+      document.getElementById('display').innerText = clip.id
+    }
+  }
+
   const playSound = () => {
    const audioTag = document.getElementById(clip.keyTrigger);
    audioTag.currentTime = 0;
    audioTag.play();
   }
 
+  
   return (
-    <div onClick={playSound} className="drum-pad">
-      <audio id={clip.keyTrigger} src={clip.url} />
+    <div id={clip.id} onClick={playSound} className="drum-pad">
+      <audio className="clip" id={clip.keyTrigger} src={clip.url} />
       {clip.keyTrigger}
     </div>
   );
