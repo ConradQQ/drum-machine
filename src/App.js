@@ -59,28 +59,59 @@ function App({clip}) {
     }
   ];
 
-  
+  const [volume, setVolume] = React.useState(1)
+
+  const handlePower = () => {
+    if (document.getElementById('indicator').classList.contains('slide')) {
+      document.getElementById('indicator').classList.remove('slide')
+      document.getElementById('indicator').innerText = 'ON'
+    } else {
+      document.getElementById('indicator').classList.add('slide')
+      document.getElementById('indicator').innerText = 'OFF'
+    }
+  }
  
 
  
 
   return (
     <div id="drum-machine">
-      <div id="pad-bank">
-      <div id="display"></div>
-      {audioClips.map(clip => {
-       return <Pad className='drum-pad' key={clip.id} clip={clip} />
-      })}
+      <div id="controls">
+        <div id="pad-bank">
+        {audioClips.map(clip => {
+        return <Pad className='drum-pad' key={clip.id} clip={clip} volume={volume} />
+        })}
+        </div>
+        <div id="control-container">
+        <div id="display" />
+          <div className="slide-container">
+            <label>Volume</label>
+            <input 
+            onChange={(e) => setVolume(e.target.value)} 
+            type="range"
+            step='0.01' 
+            min="0" 
+            max="1" 
+            value={volume}
+            id="slider" />
+          </div>
+          <p>Power</p>
+          <div id="power-button">
+            <div id="indicator" onClick={handlePower}>
+              ON
+            </div>
+          </div>
+        </div>
+        </div>
       </div>
-      
-    </div>
     
   );
 
 }
 
-function Pad({clip}) {
+function Pad({clip, volume}) {
 
+  // Event handler for keypress behavior
   React.useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
     return () => {
@@ -89,10 +120,19 @@ function Pad({clip}) {
     }
   }, []);
 
+  // Event handler for display behavior on keypress
   React.useEffect(() => {
     document.addEventListener('keydown', handleDisplay);
     return () => {
     document.removeEventListener('keydown', handleDisplay);
+    }
+  }, []);
+
+  // Event handler for display behacior on click
+  React.useEffect(() => {
+    document.addEventListener('click', handleDisplay);
+    return () => {
+    document.removeEventListener('click', handleDisplay);
     }
   }, []);
 
@@ -108,15 +148,23 @@ function Pad({clip}) {
     }
   }
 
+  const handleDisplayOnClick = () => {
+    document.getElementById('display').innerText = clip.id
+  }
+
+
+
   const playSound = () => {
    const audioTag = document.getElementById(clip.keyTrigger);
+   audioTag.volume = volume;
    audioTag.currentTime = 0;
    audioTag.play();
+   
   }
 
   
   return (
-    <div id={clip.id} onClick={playSound} className="drum-pad">
+    <div id={clip.id} onClick={() => {playSound(); handleDisplayOnClick()}} className="drum-pad">
       <audio className="clip" id={clip.keyTrigger} src={clip.url} />
       {clip.keyTrigger}
     </div>

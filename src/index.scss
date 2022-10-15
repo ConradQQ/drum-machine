@@ -24,26 +24,15 @@ body {
   margin: auto;
   display: flex;
 }
-#pad-bank {
-  width: 50vw;
+
+#controls {
+  width: 60vw;
   height: 50vh;
-  background-color: yellow;
+  background: blueviolet;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin: auto;
-  display: flex;
-  align-items: center;
-}
-.drum-pad {
-  width: 5vw;
-  height: 5vh;
-  background: blue;
-  color: white;
-  cursor: pointer;
-  margin: 10px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
 }
 
 #display {
@@ -53,5 +42,65 @@ body {
   height: 10vh;
   background: red;
   text-align: center;
+  margin: 50px;
 }
+
+#pad-bank {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  margin-left: 20px;
+
+}
+
+.drum-pad {
+  width: 150px;
+  height: 15vh;
+  background: blue;
+  color: white;
+  cursor: pointer;
+  margin: 2px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+#control-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+#power-button {
+  background: orange;
+  width: 60px;
+  height: 30px;
+
+  #indicator {
+    background-color: green;
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .slide {
+    transform: translateX(30px);
+    background-color: red;
+  }
+}
+
 
